@@ -1,4 +1,4 @@
-var resolution = 10;
+var resolution = 20;
 var columns;
 var rows;
 var field = [];
@@ -34,6 +34,24 @@ function draw()
       stroke(field[i][j] * 255);
       strokeWeight(resolution * 0.5);
       point(i * resolution, j * resolution);
+    }
+  }
+  
+  for (let i = 0; i < rows - 1; i++)
+  {
+    for (let j = 0; j < columns - 1; j++)
+    {
+      let x = i * resolution;
+      let y = j * resolution;
+      
+      let a = createVector(x + resolution * 0.5, y);
+      let b = createVector(x + resolution, y + resolution * 0.5);
+      let c = createVector(x + resolution * 0.5, y + resolution);
+      let d = createVector(x, y + resolution * 0.5);
+      
+      stroke(255);
+      strokeWeight(2);
+      line(a.x, a.y, d.x, d.y);
     }
   }
 }
