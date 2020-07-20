@@ -1,9 +1,13 @@
-// Set the resolution (the lower, the more lines)
-var resolution = 20;
-
 var columns;
 var rows;
 var field = [];
+
+// Set the resolution (the lower, the more lines)
+var resolution = 5;
+// Set the frequency of the lines (the bigger, the more frequent)
+var increment = 0.05;
+// Set the generation method (0 - random, 1 - perlin noise)
+var generation = 1;
 
 function setup() 
 {
@@ -23,15 +27,33 @@ function setup()
 
 function draw() 
 {
-  background(127);
+  background(0);
   
   // Choose which corners are white and which are black
-  for (let i = 0; i < rows; i++)
+  switch (generation)
   {
-    for (let j = 0; j < columns; j++)
-    {
-      field[i][j] = int(random(2));
-    }
+    case 0:
+      for (let i = 0; i < rows; i++)
+      {
+        for (let j = 0; j < columns; j++)
+        {
+          field[i][j] = int(random(2));
+        }
+      }
+      break;
+    case 1:
+      let x_off = 0.0;
+      for (let i = 0; i < rows; i++)
+      {
+        x_off += increment;
+        let y_off = 0.0;
+        for (let j = 0; j < columns; j++)
+        {
+          field[i][j] = round(noise(x_off, y_off));
+          y_off += increment;
+        }
+      }
+    break;
   }
   
   // Draw the dividing lines
@@ -55,9 +77,11 @@ function draw()
       stroke(255);
       strokeWeight(2);
       
-      // Draw line accordingly (0 and 15 case missing because there is no line drawn)
+      // Draw line accordingly
       switch(square_case)
       {
+        case 0:
+          break;
         case 1:
           line(c.x, c.y, d.x, d.y);
           break;
@@ -102,23 +126,13 @@ function draw()
         case 14:
           line(c.x, c.y, d.x, d.y);
           break;
+        case 15:
+          break;
         default:
           break;
       }
     }
   }
-  
-  // Draw each corner point
-  for (let i = 0; i < rows; i++)
-  {
-    for (let j = 0; j < columns; j++)
-    {
-      stroke(field[i][j] * 255);
-      strokeWeight(2);
-      point(i * resolution, j * resolution);
-    }
-  }
-  
 }
 
 // Function to convert a 4 digit binary number to a decimal number
